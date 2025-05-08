@@ -40,7 +40,7 @@ def load_and_visualize_graph():
             for i, vertex in enumerate(graph.vs):
                 content = vertex['content'] if 'content' in vertex.attributes() else str(i)
                 # 如果内容太长，只取前10个字符
-                node_labels[i] = str(content)[:20] + '...' if len(str(content)) > 10 else str(content)
+                node_labels[i] = str(content)[:20] + '...' if len(str(content)) > 20 else str(content)
             print('成功获取节点标签')
         except Exception as e:
             print(f'获取节点标签时出错：{str(e)}')
@@ -52,7 +52,9 @@ def load_and_visualize_graph():
         ax = fig.add_subplot(111)
         
         # 设置布局
-        pos = nx.spring_layout(G, k=1, iterations=50)
+        import numpy as np
+        np.random.seed(42)  # 使用固定的随机种子
+        pos = nx.spring_layout(G, k=1, iterations=50, seed=42)
         
         # 绘制图形
         nx.draw(G, pos, ax=ax, with_labels=True, labels=node_labels,
