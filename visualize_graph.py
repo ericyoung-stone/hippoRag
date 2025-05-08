@@ -40,29 +40,27 @@ def load_and_visualize_graph():
             for i, vertex in enumerate(graph.vs):
                 content = vertex['content'] if 'content' in vertex.attributes() else str(i)
                 # 如果内容太长，只取前10个字符
-                node_labels[i] = str(content)[:10] + '...' if len(str(content)) > 10 else str(content)
+                node_labels[i] = str(content)[:20] + '...' if len(str(content)) > 10 else str(content)
             print('成功获取节点标签')
         except Exception as e:
             print(f'获取节点标签时出错：{str(e)}')
             # 使用节点索引作为默认标签
             node_labels = {i: str(i) for i in range(len(graph.vs))}
         
-        # 设置图形大小
-        plt.figure(figsize=(15, 10))
+        # 设置图形大小和布局参数
+        fig = plt.figure(figsize=(15, 10), constrained_layout=True)
+        ax = fig.add_subplot(111)
         
         # 设置布局
         pos = nx.spring_layout(G, k=1, iterations=50)
         
         # 绘制图形
-        nx.draw(G, pos, with_labels=True, labels=node_labels,
+        nx.draw(G, pos, ax=ax, with_labels=True, labels=node_labels,
                 node_color='lightblue', node_size=2000, font_size=8,
                 font_weight='bold', edge_color='gray', width=1)
         
         # 添加标题
-        plt.title('知识图谱可视化', fontsize=16, pad=20)
-        
-        # 调整布局
-        plt.tight_layout()
+        ax.set_title('知识图谱可视化', fontsize=16, pad=20)
         
         # 生成带时间戳的文件名
         from datetime import datetime
